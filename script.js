@@ -1,4 +1,5 @@
-const tableBody = document.getElementById('.tableBody');
+const tableBody = document.getElementById('tableBody');
+const filterInputName = document.getElementById('filterInputName');
 
   //criar a div que terá o mapa
   const divMap = document.querySelector('div');
@@ -12,7 +13,7 @@ fetch('https://jsonplaceholder.typicode.com/users/')
   .then(response => response.json())
   .then(data => {
     usersData = data;
-    renderTableRows();
+    renderTableRows(data);
   });
 
 filterInputName.addEventListener('keyup', filterRows);
@@ -22,14 +23,14 @@ const renderTableRows = (data) => {
   let tableRows = '';
 
   data.forEach(user => {
-    user['fullAdress'] = `${user.adress.street}, ${user.addres.suite} - ${user.adress.city} | ${user.address.suite}, ZIP: ${user.address.zipcode}  `
+    user['fullAddress'] = `${user.address.street}, ${user.address.suite} - ${user.address.city} | ${user.address.suite}, ZIP: ${user.address.zipcode}  `
     //console.log(user)
   });
 
   //console.log('data', data)
   data.forEach(user => {
     tableRows += `
-      <tr >
+      <tr>
         <td>${user.id}</td>
         <td>${user.name}</td>
         <td>${user.email}</td>
@@ -49,14 +50,14 @@ const renderTableRows = (data) => {
     `;
   });
 
-  tableBody = tableRows;
+  tableBody.innerHTML = tableRows;
 }
 
 function filterRows() {
   const filterValueName = filterInputName.value.toLowerCase();
 
 
-  const filteredData = usersData.map(user =>
+  const filteredData = usersData.filter(user =>
     user.name.toLowerCase() === (filterValueName) ||
     user.email.toLowerCase() === (filterValueName) ||
     user.fullAddress.toLowerCase().includes(filterValueName)
@@ -95,7 +96,7 @@ async function initMap(lat, long, name) {
     title: name
   });
 
-  mainDiv = (mainDiv);
+  
 }
 
 //initMap();
